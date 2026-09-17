@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>DPI Cheat · Demo</title>
+
+<style>
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{
+    margin:0;
+    min-height:100vh;
+    font-family:'Segoe UI',Arial,sans-serif;
+    color:white;
+    background:#050914;
+    overflow-x:hidden;
+}
+
+/* ===== NỀN 7 MÀU ĐỘNG ===== */
+body::before{
+    content:"";
+    position:fixed;
+    inset:-50%;
+    z-index:-2;
+    background:conic-gradient(
+        #ff0055,#ff9900,#ffee00,#00ff66,
+        #00d9ff,#6633ff,#ff00cc,#ff0055
+    );
+    filter:blur(60px);
+    opacity:.55;
+    animation:rotate 8s linear infinite;
+}
+body::after{
+    content:"";
+    position:fixed;
+    inset:0;
+    z-index:-1;
+    background:#03050bd9;
+}
+@keyframes rotate{ to{transform:rotate(360deg)} }
+
+/* ===== CONTAINER ===== */
+.container{
+    width:min(94%,480px);
+    margin:30px auto;
+}
+.card{
+    background:#0b1020e8;
+    border:1px solid #ffffff25;
+    border-radius:24px;
+    overflow:hidden;
+    box-shadow:0 20px 70px #000;
+    backdrop-filter:blur(15px);
+}
+
+/* ===== HEADER ===== */
+.header{
+    text-align:center;
+    padding:25px;
+    border-bottom:1px solid #ffffff18;
+}
+.logo0{
+    font-size:32px;
+    font-weight:900;
+    letter-spacing:2px;
+    background:linear-gradient(
+,#        90deg,
+        #ff1744ffee,#ff98000,
+        #00e676,#00d9ff,#7c4dff,#ff00c8
+    );
+    background-size:400%;
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent;
+    animation:rainbow 4s linear infinite;
+}
+@keyframes rainbow{ to{background-position:400%} }
+.sub{
+    color:#aeb7ca;
+    font-size:13px;
+    margin-top:8px;
+    letter-spacing:1px;
+}
+
+/* ===== BOX ===== */
+.box{
+    margin:16px;
+    padding:17px;
+    border-radius:18px;
+    background:#ffffff08;
+    border:1px solid #ffffff12;
+}
+
+/* ===== INPUT / BUTTON ===== */
+input{
+    width:100%;
+    padding:14px;
+    margin-top:10px;
+    border-radius:13px;
+    border:1px solid #ffffff22;
+    background:#0009;
+    color:white;
+    outline:none;
+    font-size:14px;
+    letter-spacing:2px;
+}
+input:focus{
+    border-color:#7c4dff;
+    box-shadow:0 0 16px #7c4dff44;
+}
+button{
+    border:0;
+    color:white;
+    font-weight:bold;
+    cursor:pointer;
+    border-radius:13px;
+    padding:13px 16px;
+    font-size:14px;
+    transition:.1s;
+}
+button:active{transform:scale(.97)}
+
+.key-btn{
+    width:100%;
+    margin-top:10px;
+    background:linear-gradient(90deg,#7c4dff,#00bcd4);
+    letter-spacing:1px;
+    box-shadow:0 4px 0 #4a2e99;
+}
+.key-btn:active{
+    transform:translateY(3px);
+    box-shadow:0 1px 0 #4a2e99;
+}
+
+.status{
+    text-align:center;
+    font-size:13px;
+    margin-top:10px;
+    min-height:20px;
+}
+.status.err{color:#f87171}
+.status.ok{color:#4ade80}
+
+.hidden{display:none}
+
+/* ===== OPTION ===== */
+.option{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:12px;
+    padding:15px;
+    margin-bottom:11px;
+    border-radius:17px;
+    background:#ffffff08;
+    border:1px solid #ffffff12;
+    transition:.2s;
+}
+.option.on{
+    border-color:#00d9ff66;
+    box-shadow:0 0 20px #00d9ff22, inset 0 0 20px #00d9ff08;
+}
+.info{flex:1}
+.name{
+    font-weight:800;
+    font-size:14px;
+    display:flex;
+    align-items:center;
+    gap:8px;
+    flex-wrap:wrap;
+}
+.author{
+    font-size:10px;
+    padding:3px 8px;
+    border-radius:20px;
+    background:linear-gradient(90deg,#7c4dff,#ff00c8);
+    font-weight:700;
+    letter-spacing:.5px;
+}
+.desc{
+    margin-top:6px;
+    color:#aeb7ca;
+    font-size:11.5px;
+    line-height:1.5;
+}
+
+/* ===== SWITCH ===== */
+.switch{
+    width:53px;
+    height:30px;
+    flex:none;
+    border-radius:30px;
+    background:#343947;
+    position:relative;
+    transition:.25s;
+    cursor:pointer;
+    border:1px solid #4a5061;
+}
+.switch::after{
+    content:"";
+    position:absolute;
+    width:24px;
+    height:24px;
+    left:3px;
+    top:2px;
+    border-radius:50%;
+    background:#ddd;
+    transition:.25s;
+    box-shadow:0 2px 6px #0008;
+}
+.switch.active{
+    background:linear-gradient(90deg,#00e676,#00d9ff);
+    border-color:#00d9ff;
+    box-shadow:0 0 20px #00d9ff66;
+}
+.switch.active::after{
+    left:26px;
+    background:white;
+}
+
+/* ===== GAME BUTTON ===== */
+.game-btn{
+    width:100%;
+    font-size:16px;
+    padding:16px;
+    letter-spacing:1px;
+    background:linear-gradient(
+        90deg,
+        #ff1744,#ff9800,#7c4dff,#00bcd4
+    );
+    background-size:300%;
+    animation:gradient 4s linear infinite;
+    box-shadow:0 5px 0 #4a2e99;
+    margin-top:6px;
+}
+.game-btn:active{
+    transform:translateY(4px);
+    box-shadow:0 1px 0 #4a2e99;
+}
+@keyframes gradient{ to{background-position:300%} }
+
+/* ===== NOTE ===== */
+.note{
+    color:#8993a9;
+    font-size:11px;
+    line-height:1.55;
+    margin-top:13px;
+    padding:10px 12px;
+    background:#0006;
+    border-radius:12px;
+    border-left:3px solid #ff9800;
+}
+.note b{color:#ffb74d}
+
+/* ===== AIM OVERLAY ===== */
+.aim-overlay{
+    position:fixed;
+    inset:0;
+    pointer-events:none;
+    display:none;
+    z-index:10;
+}
+.crosshair{
+    position:absolute;
+    width:90px;
+    height:90px;
+    left:50%;
+    top:50%;
+    transform:translate(-50%,-50%);
+    border:2px solid #00eaff;
+    border-radius:50%;
+    box-shadow:0 0 25px #00eaff99,inset 0 0 15px #00eaff44;
+    animation:crosshairPulse 2s ease-in-out infinite;
+}
+@keyframes crosshairPulse{
+    0%,100%{transform:translate(-50%,-50%) scale(1);opacity:1}
+    50%{transform:translate(-50%,-50%) scale(1.1);opacity:.85}
+}
+.crosshair::before,
+.crosshair::after{
+    content:"";
+    position:absolute;
+    background:#00eaff;
+    box-shadow:0 0 8px #00eaff;
+}
+.crosshair::before{
+    width:110%;
+    height:1.5px;
+    left:-5%;
+    top:50%;
+}
+.crosshair::after{
+    width:1.5px;
+    height:110%;
+    top:-5%;
+    left:50%;
+}
+.crosshair .center-dot{
+    position:absolute;
+    width:6px;
+    height:6px;
+    background:#ff0055;
+    border-radius:50%;
+    left:50%;
+    top:50%;
+    transform:translate(-50%,-50%);
+    box-shadow:0 0 12px #ff0055;
+}
+
+/* ===== TOAST ===== */
+.toast{
+    position:fixed;
+    left:50%;
+    bottom:25px;
+    transform:translateX(-50%) translateY(20px);
+    background:#121827f2;
+    border:1px solid #ffffff25;
+    padding:12px 20px;
+    border-radius:14px;
+    font-size:13px;
+    font-weight:600;
+    display:none;
+    z-index:20;
+    opacity:0;
+    transition:opacity .3s,transform .3s;
+    max-width:90%;
+    text-align:center;
+    white-space:nowrap;
+}
+.toast.show{
+    display:block;
+    opacity:1;
+    transform:translateX(-50%) translateY(0);
+}
+
+/* ===== GAME FRRE FIRE NEW OB55 ===== */
+#gameDemo{display:none}
+.demo-screen{
+    width:100%;
+    aspect-ratio:16/9;
+    border-radius:15px;
+    margin-bottom:14px;
+    background:
+        radial-gradient(circle at 30% 40%, #1a3a5c, #0a1a2a),
+        linear-gradient(135deg,#0d1b2a,#1b263b);
+    position:relative;
+    overflow:hidden;
+    border:1px solid #ffffff1a;
+}
+.demo-screen::before{
+    content:"🎮";
+    position:absolute;
+    top:50%;left:50%;
+    transform:translate(-50%,-50%);
+    font-size:48px;
+    opacity:.5;
+}
+.demo-screen .hud{
+    position:absolute;
+    top:8px;left:8px;
+    font-size:10px;
+    background:#0009;
+    padding:3px 8px;
+    border-radius:20px;
+    color:#00eaff;
+    font-family:monospace;
+}
+.demo-screen .hp{
+    position:absolute;
+    bottom:8px;left:8px;
+    width:80px;height:6px;
+    background:#0009;
+    border-radius:10px;
+    overflow:hidden;
+}
+.demo-screen .hp-fill{
+    height:100%;
+    width:70%;
+    background:linear-gradient(90deg,#00e676,#00d9ff);
+    animation:hpPulse 2s infinite;
+}
+@keyframes hpPulse{
+    0%,100%{width:70%}
+    50%{width:75%}
+}
+
+.demo-title{
+    font-weight:800;
+    font-size:16px;
+    margin-bottom:10px;
+    color:#00eaff;
+}
+.demo-status{
+    color:#9ca6ba;
+    font-size:12px;
+    line-height:1.6;
+    margin-bottom:14px;
+}
+.demo-status b{color:#4ade80}
+
+.back-btn{
+    width:100%;
+    background:#ffffff15;
+    border:1px solid #ffffff22;
+}
+
+@media (max-width:420px){
+    .logo{font-size:24px}
+    .header{padding:18px}
+    .option{padding:12px}
+    .name{font-size:13px}
+    .desc{font-size:11px}
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+<div class="card">
+
+    <div class="header">
+        <div class="logo">⚡ DPI CHEAT</div>
+        <div class="sub">XTINHDZ · iOS ·</div>
+    </div>
+
+    <!-- ===== LOGIN ===== -->
+    <div id="login" class="box">
+        <b>🔐 NHẬP KEY ( tiktok : mduciosvns1 )</b>
+        <div style="font-size:12px;color:#9ca6ba;margin-top:6px">
+            Nhập key để truy cập menu.
+        </div>
+        <input id="keyInput" type="password" placeholder="Nhập key..." autocomplete="off">
+        <button class="key-btn" onclick="login()">XÁC NHẬN KEY</button>
+        <div id="keyStatus" class="status"></div>
+    </div>
+
+    <!-- ===== MENU ===== -->
+    <div id="menu" class="box hidden">
+        <div style="font-weight:900;margin-bottom:14px;font-size:15px;letter-spacing:1px">
+            🎛️ MOD MENU
+        </div>
+
+        <!-- Nhẹ Tâm -->
+        <div class="option" id="opt1">
+            <div class="info">
+                <div class="name">
+                    Nhẹ Tâm
+                    <span class="author">xtinhdz</span>
+                </div>
+                <div class="desc">
+                    Chế độ giao diện nhẹ/mượt — giảm hiệu ứng nặng, hỗ trợ mọi thiết bị iOS.
+                </div>
+            </div>
+            <div class="switch" onclick="toggle(this,'opt1','Nhẹ Tâm')"></div>
+        </div>
+
+        <!-- Giảm Lag -->
+        <div class="option" id="opt2">
+            <div class="info">
+                <div class="name">
+                    Giảm Lag
+                    <span class="author">xtinhdz</span>
+                </div>
+                <div class="desc">
+                    Lọc bỏ hiệu ứng không cần thiết, giảm tải giao diện, giúp FPS mượt hơn.
+                </div>
+            </div>
+            <div class="switch" onclick="toggle(this,'opt2','Giảm Lag')"></div>
+        </div>
+
+        <!-- Bám nhẹ vùng cổ -->
+        <div class="option" id="opt3">
+            <div class="info">
+                <div class="name">
+                    Bám nhẹ vùng cổ
+                    <span class="author">xtinhdz</span>
+                </div>
+                <div class="desc">
+                    Hiện vòng tròn tâm ở giữa màn hình. Khi bật, vòng tròn vẫn hiển thị khi vào chế độ game.
+                </div>
+            </div>
+            <div class="switch" id="aimSwitch" onclick="toggleAim(this)"></div>
+        </div>
+
+        <button class="game-btn" onclick="openGame()">🎮 VÀO GAME</button>
+
+        <div class="note">
+            ⚠️ <b>Đây là bản test menu ( chưa chính thức ).</b> Trang Dpi Cheat file hệ thống iOS (<code>com.dts.freefireth</code>), API máy chủ Garena, can thiệp bộ nhớ game !!
+        </div>
+    </div>
+
+    <!-- ===== GAME FREE FIRE NEW OB55 ===== -->
+    <div id="gameDemo" class="box">
+        <div class="demo-screen">
+            <div class="hud">FPS: 60 · PING: 12ms</div>
+            <div class="hp"><div class="hp-fill"></div></div>
+        </div>
+        <div class="demo-title">🎮 CHẾ ĐỘ GAME. </div>
+        <div class="demo-status" id="demoStatus">
+            Các chức năng đã bật được ghi nhận !! ( tiktok mduciosvns1 )
+        </div>
+        <button class="back-btn" onclick="backMenu()">← QUAY LẠI MENU</button>
+    </div>
+
+</div>
+</div>
+
+<!-- ===== VÒNG TRÒN MÔ PHỎNG ===== -->
+<div id="aimOverlay" class="aim-overlay">
+    <div class="crosshair">
+        <div class="center-dot"></div>
+    </div>
+</div>
+
+<!-- ===== TOAST ===== -->
+<div id="toast" class="toast"></div>
+
+<script>
+// ==============================================================
+//  DPI CHEAT — HỘ TRỢ KÉO TÂM ( No Hack , Antiban Blist )
+//  Key: xtdznew
+// ==============================================================
+
+(function(){
+    'use strict';
+
+    const KEY = 'xtdznew';
+    const state = { opt1:false, opt2:false, opt3:false };
+
+    // ===== TOAST =====
+    let toastTimer = null;
+    function toast(text){
+        const t = document.getElementById('toast');
+        t.textContent = text;
+        t.classList.add('show');
+        clearTimeout(toastTimer);
+        toastTimer = setTimeout(()=>t.classList.remove('show'), 1800);
+    }
+
+    // ===== LOGIN =====
+    window.login = function(){
+        const input = document.getElementById('keyInput');
+        const status = document.getElementById('keyStatus');
+        const key = input.value.trim();
+
+        if(key === KEY){
+            status.className = 'status ok';
+            status.textContent = '✅ Key hợp lệ!';
+            document.getElementById('login').classList.add('hidden');
+            document.getElementById('menu').classList.remove('hidden');
+            toast('✅ Đăng nhập thành công');
+        } else {
+            status.className = 'status err';
+            status.textContent = '❌ Mua Key Liên Hệ Tiktok : mduciosvns1!';
+            input.style.borderColor = '#f87171';
+            setTimeout(()=>{ input.style.borderColor = ''; }, 600);
+        }
+    };
+
+    // ===== TOGGLE THƯỜNG =====
+    window.toggle = function(el, optId, name){
+        el.classList.toggle('active');
+        const isOn = el.classList.contains('active');
+        state[optId] = isOn;
+        document.getElementById(optId).classList.toggle('on', isOn);
+        toast(isOn ? '✅ ' + name + ' đã BẬT' : '⛔ ' + name + ' đã TẮT');
+    };
+
+    // ===== TOGGLE AIM (BÁM NHẸ VÙNG CỔ) =====
+    window.toggleAim = function(el){
+        el.classList.toggle('active');
+        const overlay = document.getElementById('aimOverlay');
+        const isOn = el.classList.contains('active');
+        state.opt3 = isOn;
+        document.getElementById('opt3').classList.toggle('on', isOn);
+        overlay.style.display = isOn ? 'block' : 'none';
+        toast(isOn ? '⭕ Vòng tròn bám đã BẬT' : '⭕ Vòng tròn bám đã TẮT');
+    };
+
+    // ===== VÀO GAME DEMO =====
+    window.openGame = function(){
+        const activeList = [];
+        if(state.opt1) activeList.push('Nhẹ Tâm');
+        if(state.opt2) activeList.push('Giảm Lag');
+        if(state.opt3) activeList.push('Bám nhẹ vùng cổ');
+
+        document.getElementById('menu').style.display = 'none';
+        document.getElementById('gameDemo').style.display = 'block';
+
+        const statusEl = document.getElementById('demoStatus');
+        if(activeList.length === 0){
+            statusEl.innerHTML = 'Chưa bật chức năng nào. Hãy quay lại menu và bật ít nhất 1 chức năng.';
+        } else {
+            statusEl.innerHTML =
+                '✅ Các chức năng đang hoạt động: <b>' +
+                activeList.join(' · ') +
+                '</b><br>Trạng thái này chỉ mang tính mô phỏng.';
+        }
+
+        // Vòng tròn aim vẫn hiển thị nếu opt3 bật
+        document.getElementById('aimOverlay').style.display =
+            state.opt3 ? 'block' : 'none';
+
+        toast('🎮 Đã vào chế độ game ');
+    };
+
+    // ===== QUAY LẠI MENU =====
+    window.backMenu = function(){
+        document.getElementById('gameDemo').style.display = 'none';
+        document.getElementById('menu').style.display = 'block';
+        document.getElementById('aimOverlay').style.display =
+            state.opt3 ? 'block' : 'none';
+    };
+
+    // ===== ENTER ĐỂ LOGIN =====
+    document.getElementById('keyInput').addEventListener('keydown', function(e){
+        if(e.key === 'Enter') window.login();
+    });
+
+    // Focus
+    document.getElementById('keyInput').focus();
+    console.log('[DPI Cheat Demo] Sẵn sàng. Key: xtdznew');
+})();
+</script>
+
+</body>
+</html>
